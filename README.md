@@ -13,7 +13,7 @@ optionally show host+port and map:
 
 ![hostmap](./img/displayhost-map.png)
 
-![server-info](./img/server-info2.png)
+![server-info](./img/server-info-3.png)
 
 
 what you need python wise:
