@@ -21,9 +21,9 @@ optionally show host+port and map:
 
  a) use pterodactyl egg above (coming soon)
  
- b) run directly
-    what you need python wise:
-    `pip install py-cord toml`
+ b) run directly:
+  - download bot.py, config.toml and servers.json
+  - install dependencies: `pip install py-cord toml`
 
 
 # HOW TO USE:
