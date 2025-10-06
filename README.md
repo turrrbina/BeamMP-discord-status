@@ -20,6 +20,8 @@ optionally show host+port and map:
 # INSTALLATION
 
  a) use pterodactyl egg above (coming soon)
+
+ or
  
  b) run directly:
   - download bot.py, config.toml and servers.json
