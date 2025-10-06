@@ -16,8 +16,14 @@ optionally show host+port and map:
 ![server-info](./img/server-info-3.png)
 
 
-what you need python wise:
-`pip install py-cord toml`
+
+# INSTALLATION
+
+ a) use pterodactyl egg above (coming soon)
+ 
+ b) run directly
+    what you need python wise:
+    `pip install py-cord toml`
 
 
 # HOW TO USE:
