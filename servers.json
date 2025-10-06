@@ -1,0 +1,7 @@
+[
+    {"ip": "s2.elbro.fun", "port": 30816, "comment":"s2 west100"},
+    {"ip": "s2.elbro.fun", "port": 30815, "comment":"s2 nordschleife"},
+    {"ip": "s2.elbro.fun", "port": 30814, "comment":"testserver, down"},
+    {"ip": "elbro.fun", "port": 40001, "comment":"italy air"},
+    {"ip": "162.55.244.229", "port": 30821, "comment":"official server, v3.4.1"}
+ ]

@@ -1,0 +1,20 @@
+######
+
+# the bot token, see https://discord.com/developers/applications
+token = ""
+
+# id of channel where the status will appear (use !beambot to get it)
+channel_id = 0
+
+# id of message that will be edited (use !beambot to get it)
+message_id = 0
+
+# display server hostname/IP and port
+display_hostport =  true
+
+# display current map
+display_map = true
+
+# is this the first time running? change it to "false" after you got the channel_id and message_id with !beambot
+# to avoid people spamming it
+firstrun = true
