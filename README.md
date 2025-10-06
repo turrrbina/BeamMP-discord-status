@@ -3,6 +3,9 @@ display BeamMP server info in discord channel
 
 this makes use of the information packet introduced in beammp server 3.7.0 - you need to run a pre-release server for it to work.
 
+
+![hostmap](./img/displayhost-map.png)
+
 what you need python wise:
 `pip install py-cord toml`
 
