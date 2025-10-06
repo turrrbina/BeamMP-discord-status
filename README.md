@@ -1,6 +1,12 @@
 # BeamMP-discord-status
 display BeamMP server info in discord channel
 
+this makes use of the information packet introduced in beammp server 3.7.0 - you need to run a pre-release server for it to work.
+
+what you need python wise:
+`pip install py-cord toml`
+
+
 # HOW TO USE:
 - this only works with beammp server versions > 3.7.0 !
 - add bot to your discord server
