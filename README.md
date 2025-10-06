@@ -8,7 +8,6 @@ what you need python wise:
 
 
 # HOW TO USE:
-- this only works with beammp server versions > 3.7.0 !
 - add bot to your discord server
 - put the bot TOKEN in config.toml
 - run it
