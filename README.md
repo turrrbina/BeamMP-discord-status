@@ -23,7 +23,7 @@ optionally show host+port and map:
  or
  
  b) run directly:
-  - download bot.py, config.toml and servers.json
+  - download `bot.py`, `config.toml` and `servers.json`
   - install dependencies: `pip install py-cord toml`
 
  or
