@@ -27,6 +27,10 @@ optionally show host+port and map:
   - download bot.py, config.toml and servers.json
   - install dependencies: `pip install py-cord toml`
 
+ or
+
+ c) ask me in discord (user: koberwhiz) to host it for you (beta)
+ 
 
 # HOW TO USE:
 - add bot to your discord server (see below if you don't know how)
