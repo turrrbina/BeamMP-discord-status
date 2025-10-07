@@ -29,7 +29,7 @@ optionally show host+port and map:
 
 
 # HOW TO USE:
-- add bot to your discord server
+- add bot to your discord server (see below if you don't know how)
 - put the bot TOKEN in `config.toml`
 - run it
 - go to the channel where you want the status to appear, best is to make a dedicated channel for this and make it read only
@@ -38,3 +38,14 @@ optionally show host+port and map:
 - change firstrun to `false`
 - edit `servers.json` to add your servers
 - restart the bot
+
+# HOW TO CREATE A BOT IN DISCORD:
+- go to https://discord.com/developers/applications
+- click on "New Application", give it a name, confirm
+- (choose an avatar)
+- go to the "OAuth2" tab and under "Scopes" enable "bot"
+- scroll down, copy the "Generated URL" and paste it into your browsers address bar, proceed to add the bot to your server
+- go to the "Bot" tab and click on "Reset Token" to generate a token
+- use that token in `config.toml`
+- scroll down and enable "Message Content Intent"
+- save your changes and proceed above
