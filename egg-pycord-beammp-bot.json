@@ -1,0 +1,92 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2025-10-07T11:10:39+02:00",
+    "name": "pycord beammp bot",
+    "author": "webmaster@elbro.fun",
+    "description": null,
+    "features": null,
+    "docker_images": {
+        "ghcr.io\/ptero-eggs\/yolks:python_3.11": "ghcr.io\/ptero-eggs\/yolks:python_3.11"
+    },
+    "file_denylist": [],
+    "startup": "\/usr\/local\/bin\/python bot.py",
+    "config": {
+        "files": "{\r\n    \"config.toml\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"channel_id =\": \"channel_id = {{server.build.env.CHANNEL_ID}}\",\r\n            \"message_id =\": \"message_id = {{server.build.env.MESSAGE_ID}}\",\r\n            \"token =\": \"token = \\\"{{server.build.env.BOT_TOKEN}}\\\"\",\r\n            \"firstrun =\": \"firstrun = {{server.build.env.FIRSTRUN}}\",\r\n            \"display_hostport =\": \"display_hostport = {{server.build.env.DISPLAY_HOSTPORT}}\",\r\n            \"display_map =\": \"display_map = {{server.build.env.DISPLAY_MAP}}\",\r\n            \"log_file =\": \"log_file = \\\"latest.log\\\"\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \"ready and online.\"\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/ash\r\n# BeamMP-discord-status bot installation script\r\n# https:\/\/github.com\/turrrbina\/BeamMP-discord-status\r\n\r\napk add --no-cache git\r\n\r\ncd \/mnt\/server\r\n\r\necho \"Cloning beamstatus-bot repo\"\r\ngit clone https:\/\/github.com\/turrrbina\/BeamMP-discord-status.git .\r\n\r\necho \"Installing python requirements into folder\"\r\npip install -U --root-user-action=ignore --target $(pwd) py-cord toml\r\n\r\necho '# the bot token, see https:\/\/discord.com\/developers\/applications\r\ntoken = \"\"\r\n\r\n# id of channel where the status will appear (use !beambot to get it)\r\nchannel_id = 0\r\n\r\n# id of message that will be edited (use !beambot to get it)\r\nmessage_id = 0\r\n\r\n# display server hostname\/IP and port\r\ndisplay_hostport = true\r\n\r\n# display map name\r\ndisplay_map = true\r\n\r\n# is this the first time running? change it to \"false\" after you got the channel_id and message_id with !beambot\r\nfirstrun = true' > config.toml\r\n\r\necho \"-----------------------------------------\"\r\necho \"Installation completed...\"\r\necho \"-----------------------------------------\"",
+            "container": "python:3.11-alpine",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Discord Bot Token",
+            "description": "https:\/\/discord.com\/developers\/applications",
+            "env_variable": "BOT_TOKEN",
+            "default_value": "000",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:128",
+            "field_type": "text"
+        },
+        {
+            "name": "Channel ID",
+            "description": "",
+            "env_variable": "CHANNEL_ID",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:64",
+            "field_type": "text"
+        },
+        {
+            "name": "Message ID",
+            "description": "",
+            "env_variable": "MESSAGE_ID",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:64",
+            "field_type": "text"
+        },
+        {
+            "name": "First run",
+            "description": "",
+            "env_variable": "FIRSTRUN",
+            "default_value": "true",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|in:true,false",
+            "field_type": "text"
+        },
+        {
+            "name": "Display host+port",
+            "description": "",
+            "env_variable": "DISPLAY_HOSTPORT",
+            "default_value": "true",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|in:true,false",
+            "field_type": "text"
+        },
+        {
+            "name": "Display map name",
+            "description": "",
+            "env_variable": "DISPLAY_MAP",
+            "default_value": "true",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|in:true,false",
+            "field_type": "text"
+        }
+    ]
+}
