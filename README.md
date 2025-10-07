@@ -3,7 +3,7 @@
 A discord bot that displays BeamMP server information, including server status, active players, mods and map directly in your Discord channel. This makes use of the information packet introduced in beammp server 3.7.0 - you need to run a pre-release server for it to work (https://github.com/BeamMP/BeamMP-Server/releases)
 
 
-colored information if a server is online / has players in it / is offline:
+colored information if a server is online / has players in it / is offline, updates every minute:
 
 ![server-info](./img/server-info.png)
 
@@ -18,13 +18,14 @@ optionally show host+port and map:
 
 # INSTALLATION
 
- a) use pterodactyl egg above
+ a) run on your machine:
+  - download `bot.py`, `config.toml` and `servers.json`
+  - install dependencies: `pip install py-cord toml`
+  - run it: `python ./bot.py`
 
  or
  
- b) run directly:
-  - download `bot.py`, `config.toml` and `servers.json`
-  - install dependencies: `pip install py-cord toml`
+ b) use pterodactyl egg above
 
  or
 
