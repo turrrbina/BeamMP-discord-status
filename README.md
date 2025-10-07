@@ -18,7 +18,7 @@ optionally show host+port and map:
 
 # INSTALLATION
 
- a) use pterodactyl egg above (coming soon)
+ a) use pterodactyl egg above
 
  or
  
@@ -28,7 +28,7 @@ optionally show host+port and map:
 
  or
 
- c) ask me in discord (user: koberwhiz) to host it for you (beta)
+ c) ask me in discord (user: koberwhiz) to host it for you (free, beta)
  
 
 # HOW TO USE:
