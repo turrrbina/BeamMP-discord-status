@@ -30,14 +30,15 @@ optionally show host+port and map:
 
 # HOW TO USE:
 - add bot to your discord server (see below if you don't know how)
-- put the bot TOKEN in `config.toml`
+- put the bot token in `config.toml`
 - run it
-- go to the channel where you want the status to appear, best is to make a dedicated channel for this and make it read only
+- go to the channel where you want the status to appear, best is to make a dedicated channel for this and make it read only after setup
 - type !beambot
 - copy the channel id and message id the bot gives you to `config.toml`
 - change firstrun to `false`
 - edit `servers.json` to add your servers
 - restart the bot
+
 
 # HOW TO CREATE A BOT IN DISCORD:
 - go to https://discord.com/developers/applications
