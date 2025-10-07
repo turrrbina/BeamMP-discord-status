@@ -1,5 +1,5 @@
 # BeamMP-discord-status
-display BeamMP server info in discord channel
+displays BeamMP server info in discord channel
 
 this makes use of the information packet introduced in beammp server 3.7.0 - you need to run a pre-release server for it to work.
 
