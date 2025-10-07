@@ -17,8 +17,8 @@ import socket
 # - go to the channel where you want the status to appear, best is to make a dedicated channel for this and make it read only
 # - type !beambot
 # - copy the channel id and message id to config.toml
+# - change firstrun to False in config.toml
 # - edit servers.json to add your servers
-# - change firstrun to False
 # - restart the bot
 
 BOT_NAME = "BeamMP Server Status Bot"
@@ -164,8 +164,12 @@ def make_embed(server, server_info):
 
 @bot.event
 async def on_ready():
-    update_serverinfo.start()
     print(f"{bot.user} is ready and online.")
+    if firstrun:
+        print(f"FIRSTRUN IS SET TO TRUE, PLEASE USE !beambot IN A CHANNEL TO GET THE CHANNEL ID AND MESSAGE ID, PUT THEM IN CONFIG.TOML AND CHANGE FIRSTRUN TO FALSE.")
+        return
+    update_serverinfo.start()
+
 
 
 @bot.event
