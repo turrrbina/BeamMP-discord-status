@@ -98,7 +98,7 @@ def get_server_info_json(host: str, port: int):
 def make_embed(server, server_info):
     # this creates one embed that we use in update_serverinfo to create the whole experience..
 
-    global allplayers
+    global players_total
     global servers_total
 
     if "error" in server_info and hide_errors:
@@ -120,7 +120,7 @@ def make_embed(server, server_info):
             color = 0x0fdd24
         
         # playercount on all servers. this is used in the footer in update_serverinfo at the bottom:
-        allplayers += players
+        players_total += players
         
         # server seems to be online, we did the hide_error and hide_empty checks - so lets add it to the list:
         servers_total += 1
@@ -214,9 +214,9 @@ async def update_serverinfo():
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     current_unix_timestamp = int(now.timestamp()) # NEW
-    global allplayers
+    global players_total
     global servers_total
-    allplayers = 0
+    players_total = 0
     servers_total = 0
     embeds = []
 
@@ -234,12 +234,12 @@ async def update_serverinfo():
     embed_info.set_footer(
         text=(
             f"{servers_total} {'server' if servers_total == 1 else 'servers'} online / "
-            f"{allplayers} {'player' if servers_total == 1 else 'players'} total / last update:"
+            f"{players_total} {'player' if players_total == 1 else 'players'} total / last update:"
             )
     )
     
     # {current_time}") # <t:{current_unix_timestamp}:T>")
-    #embed_info.set_footer(text=f"{len(servers)} servers / {allplayers} players total / last update:")# {current_time}") # <t:{current_unix_timestamp}:T>") #
+    #embed_info.set_footer(text=f"{len(servers)} servers / {players_total} players total / last update:")# {current_time}") # <t:{current_unix_timestamp}:T>") #
     embeds.append(embed_info)
     await message.edit(embeds=embeds, content="")
 
