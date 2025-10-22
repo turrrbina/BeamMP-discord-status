@@ -20,7 +20,7 @@ optionally show host+port and map:
 
  a) run on your machine:
   - download `bot.py`, `config.toml` and `servers.json`
-  - install dependencies: `pip install py-cord toml`
+  - install dependencies: `pip install py-cord toml` (on python 3.13 you also need `audioop-lts`)
   - run it: `python ./bot.py`
 
  or
