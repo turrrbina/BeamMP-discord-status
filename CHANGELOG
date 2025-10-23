@@ -1,0 +1,8 @@
+0.0.3
+- hide_errors config variable: dont show server when it's not online
+- hide_empty config variable: dont show empty servers
+
+- footer: 'last update' uses discord timestamp now
+- footer: show only how many servers are online, not how many are in servers.json
+- footer: cosmetic changes in footer ("server/servers", "player/players")
+-

@@ -9,12 +9,19 @@ channel_id = 0
 # id of message that will be edited (use !beambot to get it)
 message_id = 0
 
+# is this the first time running? change it to "false" after you got the channel_id and message_id with !beambot
+# to avoid people spamming it
+
+firstrun = true
+
 # display server hostname/IP and port
 display_hostport =  true
 
 # display current map
 display_map = true
 
-# is this the first time running? change it to "false" after you got the channel_id and message_id with !beambot
-# to avoid people spamming it
-firstrun = true
+# dont show a server when its offline / doesnt respond correctly
+hide_errors = false
+
+# dont show empty servers
+hide_empty = false

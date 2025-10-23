@@ -2,7 +2,7 @@ from datetime import datetime
 import discord  # https://pycord.dev/
 from discord.ext import tasks
 import json
-import toml
+import toml # type: ignore
 import sys
 # from random import randint # used this for random embed colors, not needed anymore unless you want it
 from re import sub
@@ -22,7 +22,7 @@ import socket
 # - restart the bot
 
 BOT_NAME = "BeamMP Server Status Bot"
-BOT_VERSION = "0.0.2"
+BOT_VERSION = "0.0.3"
 #with open("config.json", "r") as f:
 #    config = json.load(f)
 config = toml.load("config.toml")
@@ -32,6 +32,8 @@ channel_id = config["channel_id"]
 message_id = config["message_id"]
 display_hostport = config["display_hostport"] # for json: .lower() == "true"
 display_map = config["display_map"]
+hide_errors = config["hide_errors"]
+hide_empty = config["hide_empty"]
 firstrun = config["firstrun"] # for json: .lower() == "true"
 
 with open('servers.json', 'r') as file:
@@ -46,6 +48,7 @@ intents.message_content = (
 bot = discord.Bot(intents=intents)
 
 allplayers = 0
+servers_total = 0
 
 
 def bytes_to_human_readable(num, suffix='B'):
@@ -95,7 +98,12 @@ def get_server_info_json(host: str, port: int):
 def make_embed(server, server_info):
     # this creates one embed that we use in update_serverinfo to create the whole experience..
 
-    global allplayers
+    global players_total
+    global servers_total
+
+    if "error" in server_info and hide_errors:
+        return False
+    
     if "error" in server_info:
         title = f"{server['ip']}:{str(server['port'])} error:"
         description = server_info['error']
@@ -103,6 +111,8 @@ def make_embed(server, server_info):
         color = 0xb71c1c
     else:
         players = int(server_info['players'])
+        if players == 0 and hide_empty:
+            return False
         # we make the embed dark green if the server is online with 0 players and bright green if there are players:
         if players == 0:
             color = 0x375427
@@ -110,7 +120,11 @@ def make_embed(server, server_info):
             color = 0x0fdd24
         
         # playercount on all servers. this is used in the footer in update_serverinfo at the bottom:
-        allplayers += players
+        players_total += players
+        
+        # server seems to be online, we did the hide_error and hide_empty checks - so lets add it to the list:
+        servers_total += 1
+
 
         # replace the semicolon in the playerlist with a comma and space to make it prettier:
         playerslist = sub(r"\;", ", ", server_info["playerslist"])
@@ -199,22 +213,33 @@ async def update_serverinfo():
     
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
-
-    global allplayers
-    allplayers = 0
-    
+    current_unix_timestamp = int(now.timestamp()) # NEW
+    global players_total
+    global servers_total
+    players_total = 0
+    servers_total = 0
     embeds = []
 
     # loop through the servers and update the embeds
     for _, server in enumerate(servers):
         server_info = get_server_info_json(server["ip"], server["port"])
         embed = make_embed(server, server_info)
-        embeds.append(embed)
+        if embed:
+            embeds.append(embed)
 
     embed_info = discord.Embed(
-        color=discord.Colour.dark_green()
+        color=discord.Colour.dark_green(),
+        timestamp=now
     )
-    embed_info.set_footer(text=f"{len(servers)} servers / {allplayers} players total / last update: {current_time}")
+    embed_info.set_footer(
+        text=(
+            f"{servers_total} {'server' if servers_total == 1 else 'servers'} online / "
+            f"{players_total} {'player' if players_total == 1 else 'players'} total / last update:"
+            )
+    )
+    
+    # {current_time}") # <t:{current_unix_timestamp}:T>")
+    #embed_info.set_footer(text=f"{len(servers)} servers / {players_total} players total / last update:")# {current_time}") # <t:{current_unix_timestamp}:T>") #
     embeds.append(embed_info)
     await message.edit(embeds=embeds, content="")
 
