@@ -7,6 +7,7 @@ import sys
 # from random import randint # used this for random embed colors, not needed anymore unless you want it
 from re import sub
 import socket
+from typing import List, Dict
 
 ###################
 # HOW TO USE:
@@ -22,7 +23,7 @@ import socket
 # - restart the bot
 
 BOT_NAME = "BeamMP Server Status Bot"
-BOT_VERSION = "0.0.3"
+BOT_VERSION = "0.0.4"
 #with open("config.json", "r") as f:
 #    config = json.load(f)
 config = toml.load("config.toml")
@@ -58,20 +59,75 @@ def bytes_to_human_readable(num, suffix='B'):
         num /= 1024.0
     return f"{num:.1f}Yi{suffix}"
  
- 
-# fills str with given fillchar to the right until width is reached:
-def ljust_custom(s: str, width: int, fillchar: str = "-"):
-    # calculate the number of fill characters needed
-    fill_length = width - len(s)
-    # ensure fill_length is not negative
-    if fill_length > 0:
-        # create the padded string
-        return s + fill_length * fillchar
-    return s
+
+def format_leaderboard_discord(entries: List[Dict]) -> str:
+    """ format for discord with monospace code blocks """
+    lines = []
+    lines.append("```")
+    #lines.append(f"{'Rank':<5} {'Owner':<15} {'Model':<10} {'Config':<15} {'Lap Time':<10} {'Penalties':<3}")
+    lines.append(f"{'Rank':<5} {'Owner':<15} {'Model':<10} {'Config':<15} {'Lap Time':<10}")
+    #lines.append("-" * 70)
+    lines.append("-" * 57)
+    for idx, entry in enumerate(entries, 1):
+        lap_time = entry.get('lapTime', 0)
+        lap_time_formatted = seconds_to_mmss(lap_time)
+        owner = entry.get('owner', 'N/A')[:15]
+        model = entry.get('model', 'N/A')[:10]
+        config = entry.get('config', 'N/A')[:15]
+        penalties = entry.get('penalties', 0)
+        
+        #lines.append(f"{idx:<5} {owner:<15} {model:<10} {config:<15} {lap_time_formatted:<10} {penalties:<3}")
+        lines.append(f"{idx:<5} {owner:<15} {model:<10} {config:<15} {lap_time_formatted:<10}")
+    
+    lines.append("```")
+    return "\n".join(lines)
 
 
-def get_server_info_json(host: str, port: int):
-    # returns json server info. if empty (probably older beammp server version) or connection error, returns json["error"]=Errormsg
+def get_leaderboard(level: str, track: str, limit: int = 10) -> List[Dict]:
+    try:
+        with open('nord_leaderboard.json', 'r') as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        print("Error: leaderboard.json not found!")
+        return []
+    except json.JSONDecodeError:
+        print("Error: Invalid JSON file!")
+        return []
+
+    levels = data.get('levels', {})
+    if level not in levels:
+        print(f"Error: Level '{level}' not found!")
+        return []
+    
+    # Get the track
+    try:
+        track_data = levels[level]['tracks'][track]
+    except KeyError:
+        print(f"Error: Track '{track}' not found in level '{level}'!")
+        return []
+
+    # Collect all entries across all vehicle types
+    all_entries = []
+
+    for _, vehicle_data in track_data.items():
+    #for vehicle_type, vehicle_data in track_data.items():
+        # Get entries list (can be a list or dict)
+        entries = vehicle_data.get('entries', [])
+
+        if isinstance(entries, list):
+            all_entries.extend(entries)
+        elif isinstance(entries, dict) and entries:  # Non-empty dict
+            all_entries.append(entries)
+
+    # Sort by lap time (ascending - fastest first), then by penalties (ascending)
+    all_entries.sort(key=lambda x: (x.get('lapTime', float('inf')), x.get('penalties', 0)))
+
+    # Return top N entries
+    return all_entries[:limit]
+
+
+def get_server_info_json(host: str, port: int) -> dict:
+    """ returns json server info. if empty (probably older beammp server version) or connection error, returns json["error"]=Errormsg """
 
     result = {}
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -95,7 +151,19 @@ def get_server_info_json(host: str, port: int):
     return result
 
 
-def make_embed(server, server_info):
+def ljust_custom(s: str, width: int, fillchar: str = "-"):
+    """ fills str with given fillchar to the right until width is reached """
+    
+    # calculate the number of fill characters needed
+    fill_length = width - len(s)
+    # ensure fill_length is not negative
+    if fill_length > 0:
+        # create the padded string
+        return s + fill_length * fillchar
+    return s
+
+
+def make_embed(server: dict, server_info: dict, leaderboard: bool = False) -> discord.Embed | bool:
     # this creates one embed that we use in update_serverinfo to create the whole experience..
 
     global players_total
@@ -173,7 +241,21 @@ def make_embed(server, server_info):
             description=description,
             color=color  # discord.Colour.blurple()
         )
+    # do we wanna display a leaderbord? lets fetch and add it to the embed:
+    if leaderboard:
+        embed.add_field(name="Leaderboard:", value="""
+                        ```
+                        ```
+                        """)
+        
     return embed
+
+
+def seconds_to_mmss(seconds: float) -> str:
+    """ convert seconds to MM:SS format """
+    minutes = int(seconds // 60)
+    secs = seconds % 60
+    return f"{minutes}:{secs:05.2f}"
 
 
 @bot.event
@@ -241,7 +323,7 @@ async def update_serverinfo():
     # {current_time}") # <t:{current_unix_timestamp}:T>")
     #embed_info.set_footer(text=f"{len(servers)} servers / {players_total} players total / last update:")# {current_time}") # <t:{current_unix_timestamp}:T>") #
     embeds.append(embed_info)
-    await message.edit(embeds=embeds, content="")
+    await message.edit(embeds=embeds, content="") # type: ignore
 
 
 print(f"Starting {BOT_NAME} v{BOT_VERSION}... https://github.com/turrrbina/BeamMP-discord-status")
